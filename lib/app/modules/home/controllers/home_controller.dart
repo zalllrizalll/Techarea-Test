@@ -12,9 +12,9 @@ class HomeController extends GetxController {
   UserProvider userProvider = UserProvider();
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    fetchData();
+    await fetchData();
   }
 
   Future<void> fetchData() async {

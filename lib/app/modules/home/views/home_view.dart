@@ -13,7 +13,7 @@ class HomeView extends GetView<HomeController> {
         title: const Text('HOME'),
         actions: [
           IconButton(
-            onPressed: () => controller.fetchData(),
+            onPressed: () async => await controller.fetchData(),
             icon: Icon(Icons.refresh, color: Colors.white),
           ),
         ],
@@ -40,7 +40,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton.icon(
-                  onPressed: () => controller.fetchData(),
+                  onPressed: () async => await controller.fetchData(),
                   icon: const Icon(Icons.refresh, color: Colors.white),
                   label: const Text(
                     'Retry',
