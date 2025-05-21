@@ -22,6 +22,8 @@ class LoginController extends GetxController {
   Future<void> login() async {
     isLoading.value = true;
 
+    await Future.delayed(const Duration(seconds: 1));
+
     try {
       final result = await loginProvider.loginUser(emailC.text, passC.text);
 
@@ -43,11 +45,11 @@ class LoginController extends GetxController {
       }
     } on SocketException {
       Get.snackbar(
-        'Connection Error',
-        'No Internet connection. Please try again.',
+        'Network Error',
+        'No internet connection. Please check your network and try again.',
       );
-    } on HttpException catch (e) {
-      Get.snackbar('HTTP Error', 'HTTP error occurred: ${e.message}');
+    } on HttpException {
+      Get.snackbar('HTTP Error', 'Server error. Please try again later.');
     } on FormatException {
       Get.snackbar(
         'Format Error',
