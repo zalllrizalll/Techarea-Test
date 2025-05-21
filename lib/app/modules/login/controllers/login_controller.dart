@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:techarea_test/app/data/providers/login_success_provider.dart';
+import 'package:techarea_test/app/data/models/login_success_model.dart';
+import 'package:techarea_test/app/data/models/login_unsuccess_model.dart';
+import 'package:techarea_test/app/data/providers/login_provider.dart';
 import 'package:techarea_test/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
@@ -13,35 +17,53 @@ class LoginController extends GetxController {
 
   final box = GetStorage();
 
-  LoginSuccessProvider loginSuccessProvider = LoginSuccessProvider();
+  LoginProvider loginProvider = LoginProvider();
 
   Future<void> login() async {
     isLoading.value = true;
 
     try {
-      if (emailC.text.isEmpty && passC.text.isEmpty) {
-        Get.snackbar('Input Empty', 'Fields cannot be empty');
-      } else if (emailC.text.isEmpty) {
-        Get.snackbar('Email Empty', 'Email cannot be empty');
-      } else if (passC.text.isEmpty) {
-        Get.snackbar('Password Empty', 'Password cannot be empty');
+      final result = await loginProvider.loginUser(emailC.text, passC.text);
+
+      if (result is LoginSuccess &&
+          result.token != null &&
+          result.token!.isNotEmpty) {
+        // Simpan token dan arahkan ke halaman utama
+        box.write('token', result.token);
+        Get.offAllNamed(Routes.HOME);
+        Get.snackbar('Success', 'Login successful');
+      } else if (result is LoginUnsuccess) {
+        // Tampilkan pesan error dari server
+        Get.snackbar(
+          'Login Failed',
+          result.error ?? 'Login failed. Please try again.',
+        );
       } else {
-        await loginSuccessProvider.loginUser(emailC.text, passC.text).then((
-          value,
-        ) {
-          if (value.token!.isNotEmpty) {
-            box.write('token', value.token);
-            Get.offAllNamed(Routes.HOME);
-            Get.snackbar('Success', 'Login successful');
-          } else {
-            Get.snackbar('Error', 'Login failed');
-          }
-        });
+        Get.snackbar('Login Failed', 'Unexpected response from server.');
       }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
+    } on SocketException {
+      Get.snackbar(
+        'Connection Error',
+        'No Internet connection. Please try again.',
+      );
+    } on HttpException catch (e) {
+      Get.snackbar('HTTP Error', 'HTTP error occurred: ${e.message}');
+    } on FormatException {
+      Get.snackbar(
+        'Format Error',
+        'Bad response format. Please contact support.',
+      );
+    } on Exception catch (e) {
+      Get.snackbar('Unexpected Error', 'Something went wrong: $e');
     } finally {
       isLoading.value = false;
     }
+  }
+
+  @override
+  void onClose() {
+    emailC.dispose();
+    passC.dispose();
+    super.onClose();
   }
 }
