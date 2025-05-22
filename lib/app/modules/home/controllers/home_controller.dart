@@ -47,6 +47,8 @@ class HomeController extends GetxController {
     try {
       isLoading.value = true;
 
+      await Future.delayed(const Duration(seconds: 1));
+
       if (titleC.text.isEmpty && bodyC.text.isEmpty) {
         Get.snackbar('Fields Empty', 'Fields cannot be empty');
       } else if (titleC.text.isEmpty) {
