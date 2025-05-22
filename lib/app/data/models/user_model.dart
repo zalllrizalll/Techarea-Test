@@ -5,13 +5,7 @@ class User {
   String? lastName;
   String? avatar;
 
-  User({
-    this.id,
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.avatar,
-  });
+  User({this.id, this.email, this.firstName, this.lastName, this.avatar});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'] as num?;

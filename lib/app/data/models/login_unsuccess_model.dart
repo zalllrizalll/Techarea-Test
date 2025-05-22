@@ -1,9 +1,7 @@
 class LoginUnsuccess {
   String? error;
 
-  LoginUnsuccess({
-    this.error,
-  });
+  LoginUnsuccess({this.error});
 
   LoginUnsuccess.fromJson(Map<String, dynamic> json) {
     error = json['error'];

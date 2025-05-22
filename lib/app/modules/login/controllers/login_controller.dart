@@ -55,8 +55,11 @@ class LoginController extends GetxController {
         'Format Error',
         'Bad response format. Please contact support.',
       );
-    } on Exception catch (e) {
-      Get.snackbar('Unexpected Error', 'Something went wrong: $e');
+    } on Exception catch (_) {
+      Get.snackbar(
+        'Unexpected Error',
+        'Something went wrong. Please try again.',
+      );
     } finally {
       isLoading.value = false;
     }

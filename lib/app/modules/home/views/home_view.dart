@@ -87,6 +87,96 @@ class HomeView extends GetView<HomeController> {
           );
         }
       }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.defaultDialog(
+            title: 'Add Data',
+            contentPadding: const EdgeInsets.all(16),
+            content: Column(
+              children: [
+                TextField(
+                  controller: controller.titleC,
+                  decoration: const InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 1,
+                  textInputAction: TextInputAction.next,
+                  autocorrect: false,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: controller.bodyC,
+                  decoration: const InputDecoration(
+                    labelText: 'Body',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 2,
+                  textInputAction: TextInputAction.done,
+                  autocorrect: false,
+                ),
+              ],
+            ),
+            cancel: ElevatedButton(
+              onPressed: () {
+                Get.back();
+                controller.titleC.clear();
+                controller.bodyC.clear();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.all(8),
+              ),
+              child: const Text(
+                'Batal',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            confirm: ElevatedButton(
+              onPressed: () async {
+                await controller.addData();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.all(8),
+              ),
+              child: Obx(
+                () =>
+                    controller.isLoading.value
+                        ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          ),
+                        )
+                        : const Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+              ),
+            ),
+          );
+        },
+        backgroundColor: Colors.blue,
+        shape: CircleBorder(side: BorderSide(color: Colors.white30, width: 2)),
+        child: const Icon(Icons.edit, color: Colors.white),
+      ),
     );
   }
 }

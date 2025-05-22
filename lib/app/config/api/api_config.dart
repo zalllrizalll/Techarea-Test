@@ -5,4 +5,5 @@ class ApiConfig {
   // API endpoints
   static const String login = '$baseUrl/api/login';
   static const String listUsers = '$baseUrl/api/users?page=2';
+  static const String postData = 'https://jsonplaceholder.typicode.com/posts';
 }

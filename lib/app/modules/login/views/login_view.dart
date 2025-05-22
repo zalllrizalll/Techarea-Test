@@ -58,14 +58,24 @@ class LoginView extends GetView<LoginController> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              child: Text(
-                controller.isLoading.value ? 'Loading...' : 'LOGIN',
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child:
+                  controller.isLoading.value
+                      ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 3,
+                        ),
+                      )
+                      : const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
             ),
           ),
         ],
