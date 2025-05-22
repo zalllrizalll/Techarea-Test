@@ -47,17 +47,25 @@ class HomeController extends GetxController {
     try {
       isLoading.value = true;
 
-      final result = await dataProvider.postData(titleC.text, bodyC.text);
-
-      if (result != null) {
-        Get.back();
-        // Handle successful data posting
-        Get.snackbar('Success', 'Data ${result.id} posted successfully');
-
-        titleC.clear();
-        bodyC.clear();
+      if (titleC.text.isEmpty && bodyC.text.isEmpty) {
+        Get.snackbar('Fields Empty', 'Fields cannot be empty');
+      } else if (titleC.text.isEmpty) {
+        Get.snackbar('Title Empty', 'Field title cannot be empty');
+      } else if (bodyC.text.isEmpty) {
+        Get.snackbar('Body Empty', 'Field body cannot be empty');
       } else {
-        errorMessage.value = 'Failed to post data. Please try again.';
+        final result = await dataProvider.postData(titleC.text, bodyC.text);
+
+        if (result != null) {
+          Get.back();
+          // Handle successful data posting
+          Get.snackbar('Success', 'Data ${result.id} posted successfully');
+
+          titleC.clear();
+          bodyC.clear();
+        } else {
+          Get.snackbar('Failed Post', 'Failed to post data. Please try again.');
+        }
       }
     } on SocketException {
       Get.snackbar(
